@@ -6,28 +6,28 @@ import java.util.List;
 public class Print2DTree {
 
 
-    public List<List<String>> printTree(TreeNode root) {
-        int rows = root == null ? 1 : getHeight(root);
-        int cols = (1 << rows) - 1;
-        List<List<String>> list = new ArrayList<>();
-        List<String> row = new ArrayList<>();
-        for (int i = 0; i < cols; i++) {
+    public List<List<String>> convertTree2Matrix(TreeNode root) {
+        int rowNum = root == null ? 1 : getHeight(root);
+        int colNum = (1 << rowNum) - 1;
+        List<List<String>> matrix = new ArrayList<>(rowNum);
+        List<String> row = new ArrayList<>(colNum);
+        for (int i = 0; i < colNum; i++) {
             row.add("");
         }
-        for (int i = 0; i < rows; i++) {
-            list.add(new ArrayList<>(row));
+        for (int i = 0; i < rowNum; i++) {
+            matrix.add(new ArrayList<>(row));
         }
-        dfs(root, rows, 0, 0, cols - 1, list);
-        return list;
+        fillMatrixRecursive(root, rowNum, 0, 0, colNum - 1, matrix);
+        return matrix;
     }
 
-    public void dfs(TreeNode root, int rows, int row, int i, int j, List<List<String>> list) {
-        if (row == rows || root == null) {
+    public void fillMatrixRecursive(TreeNode root, int rowNum, int nthRow, int leftMarginIndex, int rightMarginIndex, List<List<String>> matrix) {
+        if (nthRow == rowNum || root == null) {
             return;
         }
-        list.get(row).set((i + j) / 2, Integer.toString(root.val));
-        dfs(root.left, rows, row + 1, i, (i + j) / 2 - 1, list);
-        dfs(root.right, rows, row + 1, (i + j) / 2 + 1, j, list);
+        matrix.get(nthRow).set((leftMarginIndex + rightMarginIndex) / 2, Integer.toString(root.val));
+        fillMatrixRecursive(root.left, rowNum, nthRow + 1, leftMarginIndex, (leftMarginIndex + rightMarginIndex) / 2 - 1, matrix);
+        fillMatrixRecursive(root.right, rowNum, nthRow + 1, (leftMarginIndex + rightMarginIndex) / 2 + 1, rightMarginIndex, matrix);
     }
 
     public int getHeight(TreeNode root) {
@@ -52,7 +52,7 @@ public class Print2DTree {
         left.setLeft(leftLeft);
         right.setLeft(rightLeft);
         right.setRight(rightRight);
-        List<List<String>> list = new Print2DTree().printTree(root);
+        List<List<String>> list = new Print2DTree().convertTree2Matrix(root);
         System.out.print("[");
         for (int i = 0; i < list.size(); i++) {
             List<String> row = list.get(i);

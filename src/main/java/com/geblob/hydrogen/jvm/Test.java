@@ -2,6 +2,7 @@ package com.geblob.hydrogen.jvm;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;
+import java.util.Properties;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
@@ -30,6 +31,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
+        new Properties();
         (new Test().new Son()).thinking();
     }
 }
